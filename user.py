@@ -1,3 +1,5 @@
+from encrypt_string import *
+
 class User:
     prior = 0
     count = 0
@@ -9,7 +11,7 @@ class User:
         self.userid = "user" + ('00' if User.count<10 else '0' if User.count<100 else '') + str(User.count)
         self.username = username
         self.email = email
-        self.password = password
+        self.password = encode_string(password)
         self.age = age
         self.bookBorrowed = []
         self.noBookBorrowed = 0
@@ -24,7 +26,7 @@ class User:
         self.age = updated_age
 
     def edit_password(self, update_password):
-        self.password = update_password
+        self.password = encode_string(update_password)
 
     def show_userInfo(self):
         print("-------------------------------------------------------------")
@@ -33,7 +35,8 @@ class User:
         print("Email: " + str(self.email))
         print("Full name: {} {}".format(str(self.firstname), str(self.lastname)))
         print("Age: Unknown") if self.age == None else print("Age: {} years old".format(str(self.age)))
-        print("Right: Admin.") if self.prior == 2 else (print("Right: Moderator.") if  self.prior == 1 else print("Right: Normal user."))
+        print("Right: Admin.") if self.prior == 2 \
+            else (print("Right: Moderator.") if  self.prior == 1 else print("Right: Normal user."))
         print("-------------------------------------------------------------")
         return 1
 
@@ -125,7 +128,8 @@ class UserManager:
         loginname = input("Username/Email: ")
         password = input("Password: ")
         for each in self.userlist:
-            if ((each.username == loginname) or (each.email == loginname)) and (each.password == password):
+            if ((each.username == loginname) or (each.email == loginname)) \
+                    and (decode_string(each.password) == password):
                 self.isLogin = True
                 return each
         print("Login fail. Username or password is incorrect.")
@@ -139,16 +143,15 @@ class UserManager:
         flag5 = False
         flag6 = False
         while not (flag1 & flag2 & flag3 & flag4 & flag5 & flag6):
-            username = input("Username: ")
-            firstname = input("First name: ")
-            lastname = input("Last name: ")
-            email = input("Email: ")
+            username = input("Username: ").strip()
+            firstname = input("First name: ").strip()
+            lastname = input("Last name: ").strip()
+            email = input("Email: ").strip()
             age = input("Age: ")
-            password = input("Password: ")
-            retype_password = input("Re-type password: ")
-    
-    
-            if username.strip() == '':
+            password = input("Password: ").strip()
+            retype_password = input("Re-type password: ").strip()
+
+            if username == '':
                 print("username should be filled.")
                 flag1 = False
             else:
@@ -163,19 +166,19 @@ class UserManager:
                 else:
                     flag2 = True
     
-            if firstname.strip() == '':
+            if firstname == '':
                 print("First name should not be blank.")
                 flag3 = False
             else:
                 flag3 = True
     
-            if lastname.strip() == '':
+            if lastname == '':
                 print("Last name should not be blank.")
                 flag4 = False
             else:
                 flag4 = True
                 
-            if email.strip() == '':
+            if email == '':
                 print("Email should not be blank.")
                 flag5 = False
             else:

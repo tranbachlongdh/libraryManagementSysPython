@@ -1,5 +1,6 @@
 import sys
 
+from encrypt_string import *
 from library import Library
 from user import Admin, UserManager
 
@@ -23,16 +24,18 @@ def special_func(user):
     if user.prior == 1:
         print("""Moderator:
                 1. Add new book
-                2. Add/remove user
+                2. Add user
                 3. Back
                 """)
         return int(input("Enter Choice:"))
     elif user.prior == 2:
         print("""Admin:
-                1. Add/remove new book
-                2. Add/remove user
-                3. Upgrage user
-                4. Back
+                1. Add new book
+                2. Remove book
+                3. Add user
+                4. Remove user
+                4. Upgrage user
+                5. Back
                 """)
         return int(input("Enter Choice:"))
 
@@ -66,7 +69,7 @@ def main():
             if choice == 0:
                 username = input("Username: ")
                 password = input("Password: ")
-                if (username == hiddenAdmin.username) and (password == hiddenAdmin.password):
+                if (username == hiddenAdmin.username) and (password == decode_string(hiddenAdmin.password)):
                     current_user = hiddenAdmin
                     userManager.isLogin = True
                     print("You've logged in as Hidden Admin")
@@ -98,19 +101,21 @@ def main():
                 choice = special_func(current_user)
                 if current_user.prior == 1:
                     if choice == 1:
-                        pass
+                        library.add_book_manual(current_user)
                     elif choice == 2:
-                        pass
+                        userManager.add_newUser()
                     elif choice == 3:
                         back = True
                 elif current_user.prior == 2:
                     if choice == 1:
-                        pass
+                        library.add_book_manual(current_user)
                     elif choice == 2:
                         pass
                     elif choice == 3:
-                        pass
+                        userManager.add_newUser()
                     elif choice == 4:
+                        pass
+                    elif choice == 5:
                         back = True
         elif choice == 5:
             current_user.show_userInfo()

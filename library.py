@@ -1,6 +1,5 @@
 from book import Book
 #from user import *
-from user import User
 
 
 class Library:
@@ -8,7 +7,6 @@ class Library:
 
     def __init__(self):
         self.availablebooks = []
-        #self.userlist = []
 
     def add_book_manual(self, user):
         if user.prior >= 1:
@@ -60,7 +58,8 @@ class Library:
             else:
                 for bk in user.bookBorrowed:
                     if str(requestedBook) == bk:
-                        asw = input('You have already borrowed the same book. Do you want to borrow the same one? (Y/N)>>')
+                        asw = input('You have already borrowed the same book. '
+                                    'Do you want to borrow the same one? (Y/N)>>')
                         if asw == 'Y' or asw == 'y':
                             print("The book you requested has now been borrowed")
                             self.availablebooks[available].copies -= 1
