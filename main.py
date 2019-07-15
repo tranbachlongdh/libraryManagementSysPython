@@ -1,70 +1,50 @@
-from library import Library
-from user import User, Admin, UserManager
 import sys
 
-
-# book_1 = Book("0-7475-3269-8", "Avengers", "Comics", "Stan Lee", "Marvel Comics", "2/5/1963", 58, 1)
-# book_2 = Book("0-7475-3269-9", "Harry Potter", "Novel", "J.K. Rowling", "Bloomsbury", "26/6/1997", 223, 5)
-# library = Library()
-# library.add_book_manual()
-# library.displayAvailablebooks()
-#
-# norUser = User("25g23", "put1hc", "123432")
-# admin1 = Admin("12345", "tol1hc", "12345")
-#
-#
-# print(norUser)
-# print(admin1)
-#
-# print(norUser.noBookBorrowed)
-# library.lendBook(norUser, norUser.requestBook)
-# library.lendBook(norUser, norUser.requestBook)
-#
-# library.displayAvailablebooks()
-#
-# library.getBookReturn(norUser, norUser.returnBook)
+from library import Library
+from user import Admin, UserManager
 
 hiddenAdmin = Admin('Long', 'Tran', 'admin', 'admin@admin.com', 'admin123456')
+
 
 def displayMenu():
     print("""== == == LIBRARY MENU == == ==
         1. Display all available books
         2. Request a book
         3. Return a book
-        4. User profile
-        5. Logout
-        6. Exit
+        4. Special function
+        5. User profile
+        6. Logout
+        7. Exit
         """)
     return int(input("Enter Choice:"))
 
-def norDisplayMenu():
-    print("""Normal user:
-        1. Change your profile
-        2. Change your password
-        3. Back
-        """)
-    return int(input("Enter Choice:"))
 
-def moderatorDisplayMenu():
-    print("""Moderator:
-        1. Change your profile
-        2. Change your password
-        3. Add new book
-        4. Add/remove user
-        5. Back
-        """)
-    return int(input("Enter Choice:"))
+def special_func(user):
+    if user.prior == 1:
+        print("""Moderator:
+                1. Add new book
+                2. Add/remove user
+                3. Back
+                """)
+        return int(input("Enter Choice:"))
+    elif user.prior == 2:
+        print("""Admin:
+                1. Add/remove new book
+                2. Add/remove user
+                3. Upgrage user
+                4. Back
+                """)
+        return int(input("Enter Choice:"))
 
-def adminDisplayMenu():
-    print("""Admin:
-        1. Your profile
-        2. Change your profile
-        3. Add/remove new book
-        4. Add/remove user
-        5. Upgrage user
-        6. Back
-        """)
-    return int(input("Enter Choice:"))
+def pass_change(user):
+    password = input('New password: ')
+    retypepass = input('Re-type new password: ')
+    if (len(password) > 6) and (password == retypepass):
+        user.edit_password(password)
+        print('Password has been changed.')
+    else:
+        print('New password is invalid.')
+
 
 def main():
     library = Library()
@@ -78,7 +58,7 @@ def main():
         while not userManager.isLogin:
             print("""== == == Welcome to library management sys.== == == 
                   1. Login
-                  2. Signin
+                  2. Sign in
                   3. About
                   4. Exit
                   """)
@@ -115,29 +95,15 @@ def main():
         elif choice == 4:
             back = False
             while not back:
-                current_user.show_userInfo()
-                if current_user.prior == 0:
-                    choice = norDisplayMenu()
+                choice = special_func(current_user)
+                if current_user.prior == 1:
                     if choice == 1:
                         pass
                     elif choice == 2:
                         pass
                     elif choice == 3:
-                        back = True
-                elif current_user.prior == 1:
-                    choice = moderatorDisplayMenu()
-                    if choice == 1:
-                        pass
-                    elif choice == 2:
-                        pass
-                    elif choice == 3:
-                        pass
-                    elif choice == 4:
-                        pass
-                    elif choice == 5:
                         back = True
                 elif current_user.prior == 2:
-                    choice = adminDisplayMenu()
                     if choice == 1:
                         pass
                     elif choice == 2:
@@ -145,16 +111,29 @@ def main():
                     elif choice == 3:
                         pass
                     elif choice == 4:
-                        pass
-                    elif choice == 5:
-                        pass
-                    elif choice == 6:
                         back = True
-            
         elif choice == 5:
+            current_user.show_userInfo()
+
+            back = False
+            while not back:
+                print("""User profile
+                1. Edit profile
+                2. Change password
+                3. Back
+                """)
+                choice = int(input("Enter Choice:"))
+                if choice == 1:
+                    pass
+                elif choice == 2:
+                    pass_change(current_user)
+                elif choice == 3:
+                    back = True
+        elif choice == 6:
             current_user = None
             userManager.isLogin = False
-        elif choice == 6:
+            print('Logged out!!!')
+        elif choice == 7:
             sys.exit()
         else:
             print("Please choose options in the list!!!\n")
