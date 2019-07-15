@@ -8,10 +8,10 @@ class Library:
 
     def __init__(self):
         self.availablebooks = []
-        self.userlist = []
+        #self.userlist = []
 
     def add_book_manual(self, user):
-        if user.prior == 1:
+        if user.prior >= 1:
             print("Please enter the book's information:")
             isbn = input("isbn: ")
             title = input("Book title: ")
@@ -87,56 +87,5 @@ class Library:
             print('isbn number you have entered is incorrect.')
             return 0
 
-    def add_newUser(self):
 
-        flag1 = False
-        flag2 = False
-        flag3 = False
-        flag4 = False
-        flag5 = False
-        while not (flag1 & flag2 & flag3 & flag4 & flag5):
-            username = input("Username: ")
-            firstname = input("First name: ")
-            lastname = input("Last name: ")
-            email = input("Email: ")
-            age = input("Age: ")
-            password = input("Password: ")
-            retype_password = input("Re-type password: ")
-
-
-            if username.strip() == '':
-                print("username should be filled.")
-                flag1 = False
-            else:
-                flag1 = True
-
-            flag2 = True
-            for user in self.userlist:
-                if user == username:
-                    print("Username was already been taken. Please choose another name.")
-                    flag2 = False
-                    break
-                else:
-                    flag2 = True
-
-            if firstname.strip() == '':
-                print("First name should not be blank.")
-                flag3 = False
-            else:
-                flag3 = True
-
-            if lastname.strip() == '':
-                print("Last name should not be blank.")
-                flag4 = False
-            else:
-                flag4 = True
-
-            if (len(password) < 6) or (retype_password != password):
-                print("Password is incorrect.")
-                flag5 = False
-            else:
-                flag5 = True
-
-        self.userlist.append(User(firstname, lastname, username, email, password, age))
-        print("New user has been created.")
         # return 1

@@ -1,5 +1,5 @@
 class User:
-    prior = -1
+    prior = 0
     count = 0
 
     def __init__(self, firstname, lastname, username, email, password, age=None):
@@ -28,12 +28,12 @@ class User:
 
     def show_userInfo(self):
         print("-------------------------------------------------------------")
-        print("User ID: " + str(self.userid))
-        print("User name: " + str(self.username))
+        print("UserID: " + str(self.userid))
+        print("Username: " + str(self.username))
         print("Email: " + str(self.email))
         print("Full name: {} {}".format(str(self.firstname), str(self.lastname)))
         print("Age: Unknown") if self.age == None else print("Age: {} years old".format(str(self.age)))
-        print("Right: Admin.") if self.prior == 1 else print("Right: Normal user.")
+        print("Right: Admin.") if self.prior == 2 else (print("Right: Moderator.") if  self.prior == 1 else print("Right: Normal user."))
         print("-------------------------------------------------------------")
         return 1
 
@@ -65,13 +65,47 @@ class User:
 
     def __str__(self):
         return type(self).__name__ + ': ID({}) --- Username({})'.format(self.userid, self.username)
+    
+    @property
+    def userUp2Mod(self):
+        self.__class__ = Moderator
+        print("User {} has been upgrage to Moderator.".format(self.userid))
+        
+    @property
+    def userDown2Nor(self):
+        if self.prior == 0:
+            print("This user is Normal user already.")
+        else:
+            self.__class__ = User
+            print("User {} has been downgrage to Normal user.".format(self.userid))
+        
+        
 
 
 class Admin(User):
-
+    prior = 2
     def __init__(self, firstname, lastname, username, email, password, age=None):
         super().__init__(firstname, lastname, username, email, password, age)
-        self.prior = 1
+        
+
+    def add(self):
+        pass
+
+    def edit(self):
+        pass
+
+    def delete(self):
+        pass
+    
+class Moderator(User):
+    prior = 1
+    def __init__(self, firstname, lastname, username, email, password, age=None):
+        super().__init__(firstname, lastname, username, email, password, age)
+        
+    @property
+    def userUp2Admin(self):
+        self.__class__ = Admin
+        print("User {} has been upgrage to Admin.".format(self.userid))
 
     def add(self):
         pass
@@ -82,7 +116,82 @@ class Admin(User):
     def delete(self):
         pass
 
-
-# user1 = Admin("Long", 'Tran', 'rose4u', 'tranbachlongdh@gmail.com', 'youaremyHero#1', 20)
-# user1.show_userInfo()
-# print(user1)
+class UserManager:
+    def __init__(self):
+        self.userlist = []
+        self.isLogin = False
+        
+    def login(self):
+        loginname = input("Username/Email: ")
+        password = input("Password: ")
+        for each in self.userlist:
+            if ((each.username == loginname) or (each.email == loginname)) and (each.password == password):
+                self.isLogin = True
+                return each
+        print("Login fail. Username or password is incorrect.")
+        return None
+    
+    def add_newUser(self):
+        flag1 = False
+        flag2 = False
+        flag3 = False
+        flag4 = False
+        flag5 = False
+        flag6 = False
+        while not (flag1 & flag2 & flag3 & flag4 & flag5 & flag6):
+            username = input("Username: ")
+            firstname = input("First name: ")
+            lastname = input("Last name: ")
+            email = input("Email: ")
+            age = input("Age: ")
+            password = input("Password: ")
+            retype_password = input("Re-type password: ")
+    
+    
+            if username.strip() == '':
+                print("username should be filled.")
+                flag1 = False
+            else:
+                flag1 = True
+    
+            flag2 = True
+            for user in self.userlist:
+                if user.username == username:
+                    print("Username was already been taken. Please choose another name.")
+                    flag2 = False
+                    break
+                else:
+                    flag2 = True
+    
+            if firstname.strip() == '':
+                print("First name should not be blank.")
+                flag3 = False
+            else:
+                flag3 = True
+    
+            if lastname.strip() == '':
+                print("Last name should not be blank.")
+                flag4 = False
+            else:
+                flag4 = True
+                
+            if email.strip() == '':
+                print("Email should not be blank.")
+                flag5 = False
+            else:
+                flag5 = True
+    
+            if (len(password) < 6) or (retype_password != password):
+                print("Password is incorrect.")
+                flag6 = False
+            else:
+                flag6 = True
+    
+        self.userlist.append(User(firstname, lastname, username, email, password, age))
+        print("New user has been created.")
+    
+    def logout(self):
+        pass
+    
+    def upgrage(self):
+        pass

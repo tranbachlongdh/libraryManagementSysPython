@@ -74,37 +74,3 @@ class Book:
     def __delete__(self):
         print("Book " + self.title + "(" + self.isbn + ") was deleted from database")
 
-
-# def add_Book(class_name, instance_name):
-#     count = Book.count + 1
-#     name = instance_name + "_" + str(count)
-#
-#     isbn = input("isbn: ")
-#     title = input("Book title: ")
-#     subject = input("Subject: ")
-#     author = input("Author: ")
-#     publisher = input("Publisher: ")
-#     date = input("Publish date: ")
-#     pages = input("Pages: ")
-#     copies = input("Copies: ")
-#
-#     globals()[name] = class_name(isbn, title, subject, author, publisher, date, pages, copies)
-#     return globals()[name]
-
-# if __name__ == "__main__":
-#     book_1 = Book("1231", "Avengers", "Comics", ["Stan Lee", "Jack Kirby"], "Marvel Comics", "2/5/1963", 58, 5)
-#     globals()['book_2'] = Book("0-7475-3269-9", "Harry Potter", "Novel", ["J.K. Rowling"], "Bloomsbury", "26/6/1997",
-#                                223, 5)
-# #     book_2.set_pages(500)
-# #     book_2.set_authors(["abc", "def"])
-# #     book_1.__delete__()
-# #     # remove_Book(book_1)
-# #     # del book_1
-# #     book_1.show_info()
-# #     book_2.show_info()
-# #     print(book.count)
-# #     # add_Book(book, "book")
-# #     print(book.isbn_list)
-#
-#     print(repr(book_1))
-#     print(repr(book_2))
