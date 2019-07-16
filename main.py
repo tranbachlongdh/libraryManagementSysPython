@@ -21,21 +21,28 @@ def displayMenu():
 
 
 def special_func(user):
-    if user.prior == 1:
+    if user.prior == 0:
+        print("""Normal user:
+                1. Back
+                """)
+        return int(input("Enter Choice:"))
+    elif user.prior == 1:
         print("""Moderator:
                 1. Add new book
-                2. Add user
-                3. Back
+                2. List all users
+                3. Add user
+                4. Back
                 """)
         return int(input("Enter Choice:"))
     elif user.prior == 2:
         print("""Admin:
                 1. Add new book
                 2. Remove book
-                3. Add user
-                4. Remove user
-                4. Upgrage user
-                5. Back
+                3. List all users
+                4. Add user
+                5. Remove user
+                6. Upgrage user
+                7. Back
                 """)
         return int(input("Enter Choice:"))
 
@@ -99,10 +106,15 @@ def main():
             back = False
             while not back:
                 choice = special_func(current_user)
-                if current_user.prior == 1:
+                if current_user.prior == 0:
+                    if choice == 1:
+                        back = True
+                elif current_user.prior == 1:
                     if choice == 1:
                         library.add_book_manual(current_user)
                     elif choice == 2:
+                        userManager.list_all_user()
+                    elif choice == 3:
                         userManager.add_newUser()
                     elif choice == 3:
                         back = True
@@ -112,10 +124,14 @@ def main():
                     elif choice == 2:
                         pass
                     elif choice == 3:
-                        userManager.add_newUser()
+                        userManager.list_all_user()
                     elif choice == 4:
-                        pass
+                        userManager.add_newUser()
                     elif choice == 5:
+                        pass
+                    elif choice == 6:
+                        pass
+                    elif choice == 7:
                         back = True
         elif choice == 5:
             current_user.show_userInfo()

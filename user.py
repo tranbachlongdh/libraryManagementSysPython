@@ -1,4 +1,5 @@
 from encrypt_string import *
+import json
 
 class User:
     prior = 0
@@ -67,7 +68,13 @@ class User:
         return type(self).__name__ + '({}, {})'.format(self.userid, self.username)
 
     def __str__(self):
-        return type(self).__name__ + ': ID({}) --- Username({})'.format(self.userid, self.username)
+        return '{} - {} - {} {} - {} - {} - ({})'\
+                        .format(self.userid, \
+                                self.username, \
+                                self.firstname, self.lastname, \
+                                self.email,\
+                                self.age, \
+                                type(self).__name__)
     
     @property
     def userUp2Mod(self):
@@ -135,6 +142,9 @@ class UserManager:
         print("Login fail. Username or password is incorrect.")
         return None
     
+    def add_userFromFile(self, path):
+        pass
+    
     def add_newUser(self):
         flag1 = False
         flag2 = False
@@ -192,6 +202,10 @@ class UserManager:
     
         self.userlist.append(User(firstname, lastname, username, email, password, age))
         print("New user has been created.")
+        
+    def list_all_user(self):
+        for user in self.userlist:
+            print('{}'.format(user))
     
     def logout(self):
         pass
