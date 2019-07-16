@@ -1,0 +1,22 @@
+{"user_data":
+  [
+    {"userid": "user001",
+    "username": "admin",
+    "email": "admin@admin.com",
+    "password": "NjU0MzIxbmltZGE=",
+    "firstname":"Long",
+    "lastname": "Tran",
+    "age": "28",
+    "prior": 2
+    },
+    {"userid": "user002",
+    "username": "tol1hc",
+    "email": "longtran@admin.com",
+    "password": "NjU0MzIx",
+    "firstname":"Long",
+    "lastname": "Bach",
+    "age": "28",
+    "prior": 0
+    }
+  ]
+}
