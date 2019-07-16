@@ -1,15 +1,21 @@
-from encrypt_string import *
 import json
+
+from encrypt_string import *
+
 
 class User:
     prior = 0
     count = 0
 
-    def __init__(self, firstname, lastname, username, email, password, age=None):
+    def __init__(self, firstname, lastname, username, email, password, age=None, userid=None):
         User.count += 1
         self.firstname = firstname
         self.lastname = lastname
-        self.userid = "user" + ('00' if User.count<10 else '0' if User.count<100 else '') + str(User.count)
+        self.userid = userid
+        if self.userid != None:
+            self.userid = userid
+        else:
+            self.userid = "user" + ('00' if User.count < 10 else '0' if User.count < 100 else '') + str(User.count)
         self.username = username
         self.email = email
         self.password = encode_string(password)
@@ -37,7 +43,7 @@ class User:
         print("Full name: {} {}".format(str(self.firstname), str(self.lastname)))
         print("Age: Unknown") if self.age == None else print("Age: {} years old".format(str(self.age)))
         print("Right: Admin.") if self.prior == 2 \
-            else (print("Right: Moderator.") if  self.prior == 1 else print("Right: Normal user."))
+            else (print("Right: Moderator.") if self.prior == 1 else print("Right: Normal user."))
         print("-------------------------------------------------------------")
         return 1
 
@@ -89,13 +95,12 @@ class User:
             self.__class__ = User
             print("User {} has been downgrage to Normal user.".format(self.userid))
         
-        
-
 
 class Admin(User):
     prior = 2
-    def __init__(self, firstname, lastname, username, email, password, age=None):
-        super().__init__(firstname, lastname, username, email, password, age)
+
+    def __init__(self, firstname, lastname, username, email, password, age=None, userid=None):
+        super().__init__(firstname, lastname, username, email, password, age, userid)
         
 
     def add(self):
@@ -106,11 +111,13 @@ class Admin(User):
 
     def delete(self):
         pass
-    
+
+
 class Moderator(User):
     prior = 1
-    def __init__(self, firstname, lastname, username, email, password, age=None):
-        super().__init__(firstname, lastname, username, email, password, age)
+
+    def __init__(self, firstname, lastname, username, email, password, age=None, userid=None):
+        super().__init__(firstname, lastname, username, email, password, age, userid)
         
     @property
     def userUp2Admin(self):
@@ -125,6 +132,7 @@ class Moderator(User):
 
     def delete(self):
         pass
+
 
 class UserManager:
     def __init__(self):
@@ -141,9 +149,25 @@ class UserManager:
                 return each
         print("Login fail. Username or password is incorrect.")
         return None
-    
+
     def add_userFromFile(self, path):
-        pass
+        datafile = json.load(open(path, 'r'))
+        # print(datafile["user_data"][1]["userid"])
+        for i in range(len(datafile["user_data"])):
+            firstname = datafile["user_data"][i]["firstname"]
+            lastname = datafile["user_data"][i]["lastname"]
+            username = datafile["user_data"][i]["username"]
+            userid = datafile["user_data"][i]["userid"]
+            email = datafile["user_data"][i]["email"]
+            password = bytes(datafile["user_data"][i]["password"], 'utf-8')
+            age = datafile["user_data"][i]["age"]
+            prior = datafile["user_data"][i]["prior"]
+            if prior == 0:
+                self.userlist.append(User(firstname, lastname, username, email, decode_string(password), age, userid))
+            elif prior == 1:
+                self.userlist.append(Moderator(firstname, lastname, username, email, decode_string(password), age, userid))
+            elif prior == 2:
+                self.userlist.append(Admin(firstname, lastname, username, email, decode_string(password), age, userid))
     
     def add_newUser(self):
         flag1 = False
@@ -204,11 +228,14 @@ class UserManager:
         print("New user has been created.")
         
     def list_all_user(self):
+        print('There are {} user.'.format(len(self.userlist)))
         for user in self.userlist:
             print('{}'.format(user))
     
-    def logout(self):
-        pass
+    def logout(self, current_user):
+        current_user = None
+        self.isLogin = False
+        print('Logged out!!!')
     
     def upgrage(self):
         pass

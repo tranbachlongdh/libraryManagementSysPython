@@ -4,7 +4,7 @@ from encrypt_string import *
 from library import Library
 from user import Admin, UserManager
 
-hiddenAdmin = Admin('Long', 'Tran', 'admin', 'admin@admin.com', 'admin123456')
+hiddenAdmin = Admin('Long', 'Tran', 'admin', 'admin@admin.com', 'admin123456', userid="user000")
 
 
 def displayMenu():
@@ -23,28 +23,29 @@ def displayMenu():
 def special_func(user):
     if user.prior == 0:
         print("""Normal user:
-                1. Back
-                """)
+        1. Back
+        """)
         return int(input("Enter Choice:"))
     elif user.prior == 1:
         print("""Moderator:
-                1. Add new book
-                2. List all users
-                3. Add user
-                4. Back
-                """)
+        1. Add new book
+        2. List all users
+        3. Add user
+        4. Back
+        """)
         return int(input("Enter Choice:"))
     elif user.prior == 2:
         print("""Admin:
-                1. Add new book
-                2. Remove book
-                3. List all users
-                4. Add user
-                5. Remove user
-                6. Upgrage user
-                7. Back
-                """)
+        1. Add new book
+        2. Remove book
+        3. List all users
+        4. Add user
+        5. Remove user
+        6. Upgrage user
+        7. Back
+        """)
         return int(input("Enter Choice:"))
+
 
 def pass_change(user):
     password = input('New password: ')
@@ -59,19 +60,17 @@ def pass_change(user):
 def main():
     library = Library()
     userManager = UserManager()
-    #norUser = Admin("Long", 'Tran', 'rose4u', 'tranbachlongdh@gmail.com', 'youaremyHero#1', 20)
-    # admin1 = Admin("12345", "tol1hc", "12345")
     current_user = None
-    #userTemp = norUser
+    userManager.add_userFromFile('sources/database.json')
     
     while True:
         while not userManager.isLogin:
             print("""== == == Welcome to library management sys.== == == 
-                  1. Login
-                  2. Sign in
-                  3. About
-                  4. Exit
-                  """)
+              1. Login
+              2. Sign in
+              3. About
+              4. Exit
+              """)
             choice = int(input("Enter Choice:"))
             if choice == 0:
                 username = input("Username: ")
@@ -151,9 +150,7 @@ def main():
                 elif choice == 3:
                     back = True
         elif choice == 6:
-            current_user = None
-            userManager.isLogin = False
-            print('Logged out!!!')
+            userManager.logout(current_user)
         elif choice == 7:
             sys.exit()
         else:
@@ -162,8 +159,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-    #library = Library()
-    #userManager = UserManager()
-    
-    
-    #library.add_book_manual(current_user)
