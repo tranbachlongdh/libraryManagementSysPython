@@ -17,7 +17,7 @@ def displayMenu():
         6. Logout
         7. Exit
         """)
-    return int(input("Enter Choice:"))
+    return input("Enter Choice:")
 
 
 def special_func(user):
@@ -25,7 +25,7 @@ def special_func(user):
         print("""Normal user:
         1. Back
         """)
-        return int(input("Enter Choice:"))
+        return input("Enter Choice:")
     elif user.prior == 1:
         print("""Moderator:
         1. Add new book
@@ -33,7 +33,7 @@ def special_func(user):
         3. Add user
         4. Back
         """)
-        return int(input("Enter Choice:"))
+        return input("Enter Choice:")
     elif user.prior == 2:
         print("""Admin:
         1. Add new book
@@ -42,9 +42,10 @@ def special_func(user):
         4. Add user
         5. Remove user
         6. Upgrage user
-        7. Back
+        7. Downgrage user
+        8. Back
         """)
-        return int(input("Enter Choice:"))
+        return input("Enter Choice:")
 
 
 def pass_change(user):
@@ -71,8 +72,8 @@ def main():
               3. About
               4. Exit
               """)
-            choice = int(input("Enter Choice:"))
-            if choice == 0:
+            choice = input("Enter Choice:")
+            if choice == '0':
                 username = input("Username: ")
                 password = input("Password: ")
                 if (username == hiddenAdmin.username) and (password == decode_string(hiddenAdmin.password)):
@@ -80,59 +81,63 @@ def main():
                     userManager.isLogin = True
                     print("You've logged in as Hidden Admin")
                     
-            elif choice == 1:
+            elif choice == '1':
                 current_user = userManager.login()
-            elif choice == 2:
+            elif choice == '2':
                 userManager.add_newUser()
-            elif choice == 3:
+            elif choice == '3':
                 print("""== == == LIBRARY MANAGEMENT SYSTEM== == == 
                   Author: Tran Bach Long
                   Created: 2019
                   """)
-            elif choice == 4:
+            elif choice == '4':
                 sys.exit()
             else:
                 print("Please choose options in the list!!!\n")
 
         choice = displayMenu()
-        if choice == 1:
+        if choice == '1':
             library.displayAvailablebooks()
-        elif choice == 2:
-            library.lendBook(current_user, current_user.requestBook)
-        elif choice == 3:
-            library.getBookReturn(current_user, current_user.returnBook)
-        elif choice == 4:
+        elif choice == '2':
+            library.lendBook(current_user, current_user.requestBook())
+        elif choice == '3':
+            library.getBookReturn(current_user, current_user.returnBook())
+        elif choice == '4':
             back = False
             while not back:
                 choice = special_func(current_user)
                 if current_user.prior == 0:
-                    if choice == 1:
+                    if choice == '1':
                         back = True
                 elif current_user.prior == 1:
-                    if choice == 1:
+                    if choice == '1':
                         library.add_book_manual(current_user)
-                    elif choice == 2:
+                    elif choice == '2':
                         userManager.list_all_user()
-                    elif choice == 3:
+                    elif choice == '3':
                         userManager.add_newUser()
-                    elif choice == 3:
+                    elif choice == '4':
                         back = True
                 elif current_user.prior == 2:
-                    if choice == 1:
+                    if choice == '1':
                         library.add_book_manual(current_user)
-                    elif choice == 2:
+                    elif choice == '2':
                         pass
-                    elif choice == 3:
+                    elif choice == '3':
                         userManager.list_all_user()
-                    elif choice == 4:
+                    elif choice == '4':
                         userManager.add_newUser()
-                    elif choice == 5:
+                    elif choice == '5':
                         pass
-                    elif choice == 6:
-                        pass
-                    elif choice == 7:
+                    elif choice == '6':
+                        dest_userid = input("Enter which user to be upgraded>>")
+                        userManager.upgrade_downgrade_user(current_user, dest_userid, "up")
+                    elif choice == '7':
+                        dest_userid = input("Enter which user to be downgraded>>")
+                        userManager.upgrade_downgrade_user(current_user, dest_userid, "down")
+                    elif choice == '8':
                         back = True
-        elif choice == 5:
+        elif choice == '5':
             current_user.show_userInfo()
 
             back = False
@@ -140,18 +145,22 @@ def main():
                 print("""User profile
                 1. Edit profile
                 2. Change password
-                3. Back
+                3. Books borrowed list
+                4. Back
                 """)
                 choice = int(input("Enter Choice:"))
-                if choice == 1:
+                if choice == '1':
                     pass
-                elif choice == 2:
+                elif choice == '2':
                     pass_change(current_user)
-                elif choice == 3:
+                elif choice == '3':
+                    print(current_user.showBooksBorrowed())
+                elif choice == '4':
                     back = True
-        elif choice == 6:
+        elif choice == '6':
             userManager.logout(current_user)
-        elif choice == 7:
+        elif choice == '7':
+            print("System exit!!!")
             sys.exit()
         else:
             print("Please choose options in the list!!!\n")
