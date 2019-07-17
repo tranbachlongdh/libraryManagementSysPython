@@ -3,7 +3,7 @@ from book import Book
 
 
 class Library:
-    maxBookBorrow = 3
+    maxBooksBorrow = 3
 
     def __init__(self):
         self.availablebooks = []
@@ -47,7 +47,7 @@ class Library:
         return -2
 
     def lendBook(self, user, requestedBook):
-        if user.noBookBorrowed >= Library.maxBookBorrow:
+        if user.noBooksBorrowed >= Library.maxBooksBorrow:
             print("You have reached limit. You can only borrow 3 books, please return lent books before borrowing")
         else:
             available = self.checkAvailability(str(requestedBook))
@@ -56,23 +56,23 @@ class Library:
             elif available == -1:
                 print('Sorry the book you have requested is currently not in the library')
             else:
-                for bk in user.bookBorrowed:
+                for bk in user.booksBorrowed:
                     if str(requestedBook) == bk:
                         asw = input('You have already borrowed the same book. '
                                     'Do you want to borrow the same one? (Y/N)>>')
                         if asw == 'Y' or asw == 'y':
                             print("The book you requested has now been borrowed")
                             self.availablebooks[available].copies -= 1
-                            user.noBookBorrowed += 1
-                            user.edit_bookBorrowed(str(requestedBook))
+                            user.noBooksBorrowed += 1
+                            user.edit_booksBorrowed(str(requestedBook))
                             return 1
                         else:
                             print("Cancel!")
                             return 0
                 print("The book you requested has now been borrowed")
                 self.availablebooks[available].copies -= 1
-                user.noBookBorrowed += 1
-                user.edit_bookBorrowed(str(requestedBook))
+                user.noBooksBorrowed += 1
+                user.edit_booksBorrowed(str(requestedBook))
 
     def getBookReturn(self, user, returnedBook):
         if returnedBook != None:
@@ -80,7 +80,7 @@ class Library:
                 if bk.isbn == str(returnedBook):
                     bk.copies += 1
                     print("Thanks for returning your borrowed book")
-                    print("You are still keeping {} books: {}".format(user.noBookBorrowed, user.showBookBorrowed))
+                    print("You are still keeping {} books: {}".format(user.noBooksBorrowed, user.showBooksBorrowed()))
                     return 1
         else:
             print('isbn number you have entered is incorrect.')
