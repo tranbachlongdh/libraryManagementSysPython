@@ -5,14 +5,14 @@ from encrypt_string import *
 
 class User:
     prior = 0
-    count = 0
+    count = -1
 
     def __init__(self, firstname, lastname, username, email, password, age=None, userid=None):
         User.count += 1
         self.firstname = firstname
         self.lastname = lastname
         self.userid = userid
-        if self.userid is None:
+        if (self.userid is None) or (self.userid == ""):
             self.userid = "user" + ('00' if User.count < 10 else '0' if User.count < 100 else '') + str(User.count)
         else:
             self.userid = userid
@@ -226,14 +226,15 @@ class UserManager:
         for user in self.userlist:
             print('{}'.format(user))
 
-    def upgrade_downgrade_user(self, current_user, p_useid, updown):
-        exit = True
+    def upgrade_downgrade_user(self, p_useid, updown):
+        exit_loop = True
+        index = 0
         for i_user in self.userlist:
             if i_user.userid == p_useid:
                 index = self.userlist.index(i_user)
-                exit = False
+                exit_loop = False
                 break
-        if not exit:
+        if not exit_loop:
             if updown == "up":
                 if i_user.prior == 0:
                     self.userlist[index].userUp2Mod()
@@ -255,6 +256,3 @@ class UserManager:
         current_user = None
         self.isLogin = False
         print('Logged out!!!')
-    
-    def upgrage(self):
-        pass

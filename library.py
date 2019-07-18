@@ -24,7 +24,6 @@ class Library:
         else:
             print("You don't have the right to add new book.")
 
-
     def displayAvailablebooks(self):
         print("================================================")
         print("We have {} books are available in our library:".format(Book.count))
@@ -85,6 +84,3 @@ class Library:
         else:
             print('isbn number you have entered is incorrect.')
             return 0
-
-
-        # return 1

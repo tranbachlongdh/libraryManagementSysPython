@@ -131,10 +131,10 @@ def main():
                         pass
                     elif choice == '6':
                         dest_userid = input("Enter which user to be upgraded>>")
-                        userManager.upgrade_downgrade_user(current_user, dest_userid, "up")
+                        userManager.upgrade_downgrade_user(dest_userid, "up")
                     elif choice == '7':
                         dest_userid = input("Enter which user to be downgraded>>")
-                        userManager.upgrade_downgrade_user(current_user, dest_userid, "down")
+                        userManager.upgrade_downgrade_user(dest_userid, "down")
                     elif choice == '8':
                         back = True
         elif choice == '5':
