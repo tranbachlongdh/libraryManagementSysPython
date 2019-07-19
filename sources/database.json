@@ -1,6 +1,7 @@
-{"user_data":
+{
+  "user_data":
   [
-    {"userid": "user001",
+    {"userid": "",
     "username": "admin",
     "email": "admin@admin.com",
     "password": "NjU0MzIxbmltZGE=",
@@ -9,7 +10,7 @@
     "age": "28",
     "prior": 2
     },
-    {"userid": "user002",
+    {"userid": "",
     "username": "tol1hc",
     "email": "longtran@admin.com",
     "password": "NjU0MzIx",
@@ -17,6 +18,27 @@
     "lastname": "Bach",
     "age": "28",
     "prior": 0
+    }
+  ],
+  "book_data":
+  [
+    {"isbn": "2523156-11234-8",
+      "title": "Harry Potter",
+      "subject": "Nover",
+      "author": "J.K.",
+      "publisher": "Bloombury",
+      "date": "1997",
+      "pages": 233,
+      "copies": 2
+    },
+    {"isbn": "2523156-11234-8",
+      "title": "Avengers",
+      "subject": "Comics",
+      "author": "Stan Lee",
+      "publisher": "Marvel",
+      "date": "1983",
+      "pages": 53,
+      "copies": 10
     }
   ]
 }

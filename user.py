@@ -14,8 +14,6 @@ class User:
         self.userid = userid
         if (self.userid is None) or (self.userid == ""):
             self.userid = "user" + ('00' if User.count < 10 else '0' if User.count < 100 else '') + str(User.count)
-        else:
-            self.userid = userid
         self.username = username
         self.email = email
         self.password = encode_string(password)
@@ -164,13 +162,9 @@ class UserManager:
                 self.userlist.append(Admin(firstname, lastname, username, email, decode_string(password), age, userid))
     
     def add_newUser(self):
-        flag1 = False
-        flag2 = False
-        flag3 = False
-        flag4 = False
-        flag5 = False
-        flag6 = False
-        while not (flag1 & flag2 & flag3 & flag4 & flag5 & flag6):
+        flag = [False]*6
+        cancel = "N"
+        while not (flag[0] & flag[1] & flag[2] & flag[3] & flag[4] & flag[5]) and not (cancel == "Y" or cancel == 'y'):
             username = input("Username: ").strip()
             firstname = input("First name: ").strip()
             lastname = input("Last name: ").strip()
@@ -181,43 +175,48 @@ class UserManager:
 
             if username == '':
                 print("username should be filled.")
-                flag1 = False
+                flag[0] = False
             else:
-                flag1 = True
+                flag[0] = True
     
-            flag2 = True
+            flag[1] = True
             for user in self.userlist:
                 if user.username == username:
                     print("Username was already been taken. Please choose another name.")
-                    flag2 = False
+                    flag[1] = False
                     break
                 else:
-                    flag2 = True
+                    flag[1] = True
     
             if firstname == '':
                 print("First name should not be blank.")
-                flag3 = False
+                flag[2] = False
             else:
-                flag3 = True
+                flag[2] = True
     
             if lastname == '':
                 print("Last name should not be blank.")
-                flag4 = False
+                flag[3] = False
             else:
-                flag4 = True
+                flag[3] = True
                 
             if email == '':
                 print("Email should not be blank.")
-                flag5 = False
+                flag[4] = False
             else:
-                flag5 = True
+                flag[4] = True
     
             if (len(password) < 6) or (retype_password != password):
                 print("Password is incorrect.")
-                flag6 = False
+                flag[5] = False
             else:
-                flag6 = True
+                flag[5] = True
+
+            if not (flag[0] & flag[1] & flag[2] & flag[3] & flag[4] & flag[4]):
+                cancel = input("Cancel? (Y/N)>>")
     
+        if cancel == "Y" or cancel == 'y':
+            return
         self.userlist.append(User(firstname, lastname, username, email, password, age))
         print("New user has been created.")
         
@@ -256,3 +255,7 @@ class UserManager:
         current_user = None
         self.isLogin = False
         print('Logged out!!!')
+
+    def export_user_toFile(self, path):
+        pass
+

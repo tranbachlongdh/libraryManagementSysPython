@@ -1,5 +1,10 @@
-from book import Book
+rom book import Book
 #from user import *
+import json
+# from user import *
+import json
+
+from book import Book
 
 
 class Library:
@@ -8,22 +13,47 @@ class Library:
     def __init__(self):
         self.availablebooks = []
 
-    def add_book_manual(self, user):
-        if user.prior >= 1:
-            print("Please enter the book's information:")
-            isbn = input("isbn: ")
-            title = input("Book title: ")
-            subject = input("Subject: ")
-            author = input("Author: ")
-            publisher = input("Publisher: ")
-            date = input("Publish date: ")
-            pages = int(input("Pages: "))
-            copies = int(input("Copies: "))
+    # This func is for adding 1 new book's data to library management system manually
+    # Output:
+    #   new book will be added to book list
+    def add_book_manual(self):
+        print("Please enter the book's information:")
+        isbn = input("isbn: ")
+        for tmpbook in self.availablebooks:
+            if tmpbook.isbn == isbn:
+                return
+        title = input("Book title: ")
+        subject = input("Subject: ")
+        author = input("Author: ")
+        publisher = input("Publisher: ")
+        date = input("Publish date: ")
+        pages = int(input("Pages: "))
+        copies = int(input("Copies: "))
+
+        self.availablebooks.append(Book(isbn, title, subject, author, publisher, date, pages, copies))
+
+    def add_book_fromFile(self, path):
+        datafile = json.load(open(path, 'r'))
+        for i in range(len(datafile["book_data"])):
+            isbn = datafile["book_data"][i]["isbn"]
+            for tmpbook in self.availablebooks:
+                if tmpbook.isbn == isbn:
+                    return
+            title = datafile["book_data"][i]["title"]
+            subject = datafile["book_data"][i]["subject"]
+            author = datafile["book_data"][i]["author"]
+            publisher = datafile["book_data"][i]["publisher"]
+            date = datafile["book_data"][i]["date"]
+            pages = int(datafile["book_data"][i]["pages"])
+            copies = int(datafile["book_data"][i]["copies"])
 
             self.availablebooks.append(Book(isbn, title, subject, author, publisher, date, pages, copies))
-        else:
-            print("You don't have the right to add new book.")
+        print("Books have been added to library.")
 
+    def export_book_toFile(self, path):
+        pass
+
+    # Display available books to screen
     def displayAvailablebooks(self):
         print("================================================")
         print("We have {} books are available in our library:".format(Book.count))
@@ -31,9 +61,9 @@ class Library:
         for bk in self.availablebooks:
             print("{}. {}".format(self.availablebooks.index(bk)+1, bk))
 
-    #This func is for checking the availability of book in system
-    #Input: isbn
-    #Output:
+    # This func is for checking the availability of book in system
+    # Input: isbn
+    # Output:
     #   Not available in system: return -2
     #   Borrow by someone else: return -1
     def checkAvailability(self, isbn):
@@ -45,6 +75,12 @@ class Library:
                     return -1
         return -2
 
+    # Lend 1 book to a user by isbn
+    # Input: user
+    # Input: isbn
+    # Output:
+    #   remove lent book from library
+    #   add book info to user profile
     def lendBook(self, user, requestedBook):
         if user.noBooksBorrowed >= Library.maxBooksBorrow:
             print("You have reached limit. You can only borrow 3 books, please return lent books before borrowing")
@@ -73,8 +109,14 @@ class Library:
                 user.noBooksBorrowed += 1
                 user.edit_booksBorrowed(str(requestedBook))
 
+    # Receive book return from user who borrowed it
+    # Input: user
+    # Input: isbn
+    # Output:
+    #   add return book to library
+    #   remove book info from user profile
     def getBookReturn(self, user, returnedBook):
-        if returnedBook != None:
+        if returnedBook is not None:
             for bk in self.availablebooks:
                 if bk.isbn == str(returnedBook):
                     bk.copies += 1

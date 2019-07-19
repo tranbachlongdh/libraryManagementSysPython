@@ -17,15 +17,15 @@ def displayMenu():
         6. Logout
         7. Exit
         """)
-    return input("Enter Choice:")
+    return input("Enter Choice>>")
 
 
-def special_func(user):
+def special_func_menu(user):
     if user.prior == 0:
         print("""Normal user:
         1. Back
         """)
-        return input("Enter Choice:")
+        return input("Enter Choice>>")
     elif user.prior == 1:
         print("""Moderator:
         1. Add new book
@@ -33,7 +33,7 @@ def special_func(user):
         3. Add user
         4. Back
         """)
-        return input("Enter Choice:")
+        return input("Enter Choice>>")
     elif user.prior == 2:
         print("""Admin:
         1. Add new book
@@ -45,7 +45,16 @@ def special_func(user):
         7. Downgrage user
         8. Back
         """)
-        return input("Enter Choice:")
+        return input("Enter Choice>>")
+
+
+def add_book_menu():
+    print("""Add new book:
+        1. Manually
+        2. Import from file
+        3. Back
+        """)
+    return input("Enter Choice>>")
 
 
 def pass_change(user):
@@ -60,6 +69,7 @@ def pass_change(user):
 
 def main():
     library = Library()
+    library.add_book_fromFile('sources/database.json')
     userManager = UserManager()
     current_user = None
     userManager.add_userFromFile('sources/database.json')
@@ -72,7 +82,7 @@ def main():
               3. About
               4. Exit
               """)
-            choice = input("Enter Choice:")
+            choice = input("Enter Choice>>")
             if choice == '0':
                 username = input("Username: ")
                 password = input("Password: ")
@@ -105,13 +115,23 @@ def main():
         elif choice == '4':
             back = False
             while not back:
-                choice = special_func(current_user)
+                choice = special_func_menu(current_user)
                 if current_user.prior == 0:
                     if choice == '1':
                         back = True
                 elif current_user.prior == 1:
                     if choice == '1':
-                        library.add_book_manual(current_user)
+                        add_choice = add_book_menu()
+                        if add_choice == '1':
+                            library.add_book_manual()
+                        elif add_choice == '2':
+                            path = input("Enter path to data file>>")
+                            library.add_book_fromFile(path)
+                        elif add_choice == '3':
+                            back = True
+                        else:
+                            print("Please choose in the list!!!")
+
                     elif choice == '2':
                         userManager.list_all_user()
                     elif choice == '3':
@@ -120,7 +140,16 @@ def main():
                         back = True
                 elif current_user.prior == 2:
                     if choice == '1':
-                        library.add_book_manual(current_user)
+                        add_choice = add_book_menu()
+                        if add_choice == '1':
+                            library.add_book_manual()
+                        elif add_choice == '2':
+                            path = input("Enter path to data file>>")
+                            library.add_book_fromFile(path)
+                        elif add_choice == '3':
+                            back = True
+                        else:
+                            print("Please choose in the list!!!")
                     elif choice == '2':
                         pass
                     elif choice == '3':
@@ -148,7 +177,7 @@ def main():
                 3. Books borrowed list
                 4. Back
                 """)
-                choice = int(input("Enter Choice:"))
+                choice = int(input("Enter Choice>>"))
                 if choice == '1':
                     pass
                 elif choice == '2':
