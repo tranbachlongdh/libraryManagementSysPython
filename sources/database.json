@@ -1,44 +1,48 @@
 {
-  "user_data":
-  [
-    {"userid": "",
-    "username": "admin",
-    "email": "admin@admin.com",
-    "password": "NjU0MzIxbmltZGE=",
-    "firstname":"Long",
-    "lastname": "Tran",
-    "age": "28",
-    "prior": 2
+  "user_data":[
+    {
+      "userid":"user001",
+      "username":"admin",
+      "email":"admin@admin.com",
+      "password":"NjU0MzIxbmltZGE=",
+      "firstname":"Long",
+      "lastname":"Tran",
+      "age":"28",
+      "booksBorrowed":[],
+      "prior":2
     },
-    {"userid": "",
-    "username": "tol1hc",
-    "email": "longtran@admin.com",
-    "password": "NjU0MzIx",
-    "firstname":"Long",
-    "lastname": "Bach",
-    "age": "28",
-    "prior": 0
+    {
+      "userid":"user002",
+      "username":"tol1hc",
+      "email":"longtran@admin.com",
+      "password":"Z25vbGhjYWI=",
+      "firstname":"Long",
+      "lastname":"Bach",
+      "age":"28",
+      "booksBorrowed":["2523156-11234-8", "12548"],
+      "prior":0
     }
   ],
-  "book_data":
-  [
-    {"isbn": "2523156-11234-8",
-      "title": "Harry Potter",
-      "subject": "Nover",
-      "author": "J.K.",
-      "publisher": "Bloombury",
-      "date": "1997",
-      "pages": 233,
-      "copies": 2
+  "book_data":[
+    {
+      "isbn":"2523156-11234-8",
+      "title":"Harry Potter",
+      "subject":"Nover",
+      "author":"J.K.",
+      "publisher":"Bloombury",
+      "date":"1997",
+      "pages":233,
+      "copies":2
     },
-    {"isbn": "2523156-11234-8",
-      "title": "Avengers",
-      "subject": "Comics",
-      "author": "Stan Lee",
-      "publisher": "Marvel",
-      "date": "1983",
-      "pages": 53,
-      "copies": 10
+    {
+      "isbn":"12548",
+      "title":"Avengers",
+      "subject":"Comics",
+      "author":"Stan Lee",
+      "publisher":"Marvel",
+      "date":"1985",
+      "pages":53,
+      "copies":5
     }
   ]
 }

@@ -1,4 +1,5 @@
 import json
+import os
 
 from encrypt_string import *
 
@@ -7,7 +8,7 @@ class User:
     prior = 0
     count = -1
 
-    def __init__(self, firstname, lastname, username, email, password, age=None, userid=None):
+    def __init__(self, firstname, lastname, username, email, password, age=None, userid=None, booksBorrowed=None):
         User.count += 1
         self.firstname = firstname
         self.lastname = lastname
@@ -18,7 +19,10 @@ class User:
         self.email = email
         self.password = encode_string(password)
         self.age = age
-        self.booksBorrowed = []
+        if booksBorrowed is None:
+            self.booksBorrowed = []
+        else:
+            self.booksBorrowed = booksBorrowed
         self.noBooksBorrowed = 0
 
     def edit_firstname(self, updated_firstname):
@@ -85,8 +89,8 @@ class User:
 class Admin(User):
     prior = 2
 
-    def __init__(self, firstname, lastname, username, email, password, age=None, userid=None):
-        super().__init__(firstname, lastname, username, email, password, age, userid)
+    def __init__(self, firstname, lastname, username, email, password, age=None, userid=None, booksBorrowed=None):
+        super().__init__(firstname, lastname, username, email, password, age, userid, booksBorrowed)
 
     def adminDown2Mod(self):
         self.__class__ = Moderator
@@ -105,8 +109,8 @@ class Admin(User):
 class Moderator(User):
     prior = 1
 
-    def __init__(self, firstname, lastname, username, email, password, age=None, userid=None):
-        super().__init__(firstname, lastname, username, email, password, age, userid)
+    def __init__(self, firstname, lastname, username, email, password, age=None, userid=None, booksBorrowed=None):
+        super().__init__(firstname, lastname, username, email, password, age, userid, booksBorrowed)
 
     def modUp2Admin(self):
         self.__class__ = Admin
@@ -143,23 +147,27 @@ class UserManager:
         return None
 
     def add_userFromFile(self, path):
-        datafile = json.load(open(path, 'r'))
-        # print(datafile["user_data"][1]["userid"])
-        for i in range(len(datafile["user_data"])):
-            firstname = datafile["user_data"][i]["firstname"]
-            lastname = datafile["user_data"][i]["lastname"]
-            username = datafile["user_data"][i]["username"]
-            userid = datafile["user_data"][i]["userid"]
-            email = datafile["user_data"][i]["email"]
-            password = bytes(datafile["user_data"][i]["password"], 'utf-8')
-            age = datafile["user_data"][i]["age"]
-            prior = datafile["user_data"][i]["prior"]
-            if prior == 0:
-                self.userlist.append(User(firstname, lastname, username, email, decode_string(password), age, userid))
-            elif prior == 1:
-                self.userlist.append(Moderator(firstname, lastname, username, email, decode_string(password), age, userid))
-            elif prior == 2:
-                self.userlist.append(Admin(firstname, lastname, username, email, decode_string(password), age, userid))
+        if os.path.isfile(path):
+            datafile = json.load(open(path, 'r'))
+            # print(datafile["user_data"][1]["userid"])
+            for i in range(len(datafile["user_data"])):
+                firstname = datafile["user_data"][i]["firstname"]
+                lastname = datafile["user_data"][i]["lastname"]
+                username = datafile["user_data"][i]["username"]
+                userid = datafile["user_data"][i]["userid"]
+                email = datafile["user_data"][i]["email"]
+                password = bytes(datafile["user_data"][i]["password"], 'utf-8')
+                age = datafile["user_data"][i]["age"]
+                booksBorrowed = datafile["user_data"][i]["booksBorrowed"]
+                prior = datafile["user_data"][i]["prior"]
+                if prior == 0:
+                    self.userlist.append(User(firstname, lastname, username, email, decode_string(password), age, userid, booksBorrowed))
+                elif prior == 1:
+                    self.userlist.append(Moderator(firstname, lastname, username, email, decode_string(password), age, userid, booksBorrowed))
+                elif prior == 2:
+                    self.userlist.append(Admin(firstname, lastname, username, email, decode_string(password), age, userid, booksBorrowed))
+        else:
+            print(path + " is not found.")
     
     def add_newUser(self):
         flag = [False]*6
@@ -256,5 +264,21 @@ class UserManager:
         self.isLogin = False
         print('Logged out!!!')
 
-    def export_user_toFile(self, path):
-        pass
+    # Convert user data list to json string
+    # Input: userlist
+    # Output: data in json format
+    def user_data_2json(self):
+        data = {}
+        data["user_data"] = []
+        for each_user in self.userlist:
+            data['user_data'].append({
+                "userid": each_user.userid,
+                "username": each_user.username,
+                "email": each_user.email,
+                "password": each_user.password.decode('utf-8'),
+                "firstname": each_user.firstname,
+                "lastname": each_user.lastname,
+                "age": each_user.age,
+                "prior": each_user.prior
+            })
+        return data

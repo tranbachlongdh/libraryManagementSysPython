@@ -1,3 +1,5 @@
+import json
+import os
 import sys
 
 from encrypt_string import *
@@ -44,6 +46,7 @@ def special_func_menu(user):
         6. Upgrage user
         7. Downgrage user
         8. Back
+        9. Export users list
         """)
         return input("Enter Choice>>")
 
@@ -67,12 +70,29 @@ def pass_change(user):
         print('New password is invalid.')
 
 
+def post_run(users, books, path):
+    output = users.user_data_2json()
+    output.update(books.book_data_2json())
+    with open(path, 'w') as outfile:
+        json.dump(output, outfile)
+
+
 def main():
+    databasepath = 'sources/database.json'
+    if not os.path.isfile(databasepath):
+        print(databasepath + " is not found.")
+        anw = input("Do you want to create new one? (Y/N)>>")
+        if anw == 'Y' or anw == 'y':
+            data = {"user_data":[], "book_data":[]}
+            with open(databasepath, 'w') as outfile:
+                json.dump(data, outfile)
+        else:
+            sys.exit()
     library = Library()
-    library.add_book_fromFile('sources/database.json')
+    library.add_book_fromFile(databasepath)
     userManager = UserManager()
     current_user = None
-    userManager.add_userFromFile('sources/database.json')
+    userManager.add_userFromFile(databasepath)
     
     while True:
         while not userManager.isLogin:
@@ -140,13 +160,13 @@ def main():
                         back = True
                 elif current_user.prior == 2:
                     if choice == '1':
-                        add_choice = add_book_menu()
-                        if add_choice == '1':
+                        sub_choice = add_book_menu()
+                        if sub_choice == '1':
                             library.add_book_manual()
-                        elif add_choice == '2':
+                        elif sub_choice == '2':
                             path = input("Enter path to data file>>")
                             library.add_book_fromFile(path)
-                        elif add_choice == '3':
+                        elif sub_choice == '3':
                             back = True
                         else:
                             print("Please choose in the list!!!")
@@ -166,6 +186,12 @@ def main():
                         userManager.upgrade_downgrade_user(dest_userid, "down")
                     elif choice == '8':
                         back = True
+                    elif choice == '9':
+                        user_list_json = userManager.user_data_2json()
+                        with open('sources/user_list.json', 'w') as outfile:
+                            json.dump(user_list_json, outfile)
+                    else:
+                        print("Please choose options in the list!!!\n")
         elif choice == '5':
             current_user.show_userInfo()
 
@@ -177,18 +203,22 @@ def main():
                 3. Books borrowed list
                 4. Back
                 """)
-                choice = int(input("Enter Choice>>"))
-                if choice == '1':
+                sub_choice = input("Enter Choice>>")
+                if sub_choice == '1':
                     pass
-                elif choice == '2':
+                elif sub_choice == '2':
                     pass_change(current_user)
-                elif choice == '3':
+                elif sub_choice == '3':
                     print(current_user.showBooksBorrowed())
-                elif choice == '4':
+                elif sub_choice == '4':
                     back = True
+                else:
+                    print("Please choose options in the list!!!\n")
         elif choice == '6':
             userManager.logout(current_user)
+            post_run(userManager, library, 'sources/database.json')
         elif choice == '7':
+            post_run(userManager, library, 'sources/database.json')
             print("System exit!!!")
             sys.exit()
         else:

@@ -1,4 +1,5 @@
 import json
+import os
 
 from book import Book
 
@@ -29,22 +30,25 @@ class Library:
         self.availablebooks.append(Book(isbn, title, subject, author, publisher, date, pages, copies))
 
     def add_book_fromFile(self, path):
-        datafile = json.load(open(path, 'r'))
-        for i in range(len(datafile["book_data"])):
-            isbn = datafile["book_data"][i]["isbn"]
-            for tmpbook in self.availablebooks:
-                if tmpbook.isbn == isbn:
-                    return
-            title = datafile["book_data"][i]["title"]
-            subject = datafile["book_data"][i]["subject"]
-            author = datafile["book_data"][i]["author"]
-            publisher = datafile["book_data"][i]["publisher"]
-            date = datafile["book_data"][i]["date"]
-            pages = int(datafile["book_data"][i]["pages"])
-            copies = int(datafile["book_data"][i]["copies"])
+        if os.path.isfile(path):
+            datafile = json.load(open(path, 'r'))
+            for i in range(len(datafile["book_data"])):
+                isbn = datafile["book_data"][i]["isbn"]
+                for tmpbook in self.availablebooks:
+                    if tmpbook.isbn == isbn:
+                        return
+                title = datafile["book_data"][i]["title"]
+                subject = datafile["book_data"][i]["subject"]
+                author = datafile["book_data"][i]["author"]
+                publisher = datafile["book_data"][i]["publisher"]
+                date = datafile["book_data"][i]["date"]
+                pages = int(datafile["book_data"][i]["pages"])
+                copies = int(datafile["book_data"][i]["copies"])
 
-            self.availablebooks.append(Book(isbn, title, subject, author, publisher, date, pages, copies))
-        print("Books have been added to library.")
+                self.availablebooks.append(Book(isbn, title, subject, author, publisher, date, pages, copies))
+            print("Books have been added to library.")
+        else:
+            print(path + " is not found.")
 
     def export_book_toFile(self, path):
         pass
@@ -122,3 +126,22 @@ class Library:
         else:
             print('isbn number you have entered is incorrect.')
             return 0
+
+    # Convert book data list to json string
+    # Input: availablebooks
+    # Output: data in json format
+    def book_data_2json(self):
+        data = {}
+        data["book_data"] = []
+        for each_book in self.availablebooks:
+            data['book_data'].append({
+                "isbn": each_book.isbn,
+                "title": each_book.title,
+                "subject": each_book.subject,
+                "author": each_book.author,
+                "publisher": each_book.publisher,
+                "date": each_book.date,
+                "pages": each_book.pages,
+                "copies": each_book.copies
+            })
+        return data
