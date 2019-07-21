@@ -2,9 +2,9 @@ import json
 import os
 import sys
 
-from encrypt_string import *
-from library import Library
-from user import Admin, UserManager
+from libs.encrypt_string import *
+from libs.library import Library
+from libs.user import Admin, UserManager
 
 hiddenAdmin = Admin('Long', 'Tran', 'admin', 'admin@admin.com', 'admin123456', userid="user000")
 
