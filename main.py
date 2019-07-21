@@ -45,8 +45,8 @@ def special_func_menu(user):
         5. Remove user
         6. Upgrage user
         7. Downgrage user
-        8. Back
-        9. Export users list
+        8. Export users list
+        9. Back
         """)
         return input("Enter Choice>>")
 
@@ -121,6 +121,7 @@ def main():
                   Created: 2019
                   """)
             elif choice == '4':
+                post_run(userManager, library, 'sources/database.json')
                 sys.exit()
             else:
                 print("Please choose options in the list!!!\n")
@@ -185,11 +186,12 @@ def main():
                         dest_userid = input("Enter which user to be downgraded>>")
                         userManager.upgrade_downgrade_user(dest_userid, "down")
                     elif choice == '8':
-                        back = True
-                    elif choice == '9':
                         user_list_json = userManager.user_data_2json()
                         with open('sources/user_list.json', 'w') as outfile:
                             json.dump(user_list_json, outfile)
+                        print("Exported!")
+                    elif choice == '9':
+                        back = True
                     else:
                         print("Please choose options in the list!!!\n")
         elif choice == '5':
@@ -200,8 +202,7 @@ def main():
                 print("""User profile
                 1. Edit profile
                 2. Change password
-                3. Books borrowed list
-                4. Back
+                3. Back
                 """)
                 sub_choice = input("Enter Choice>>")
                 if sub_choice == '1':
@@ -209,8 +210,6 @@ def main():
                 elif sub_choice == '2':
                     pass_change(current_user)
                 elif sub_choice == '3':
-                    print(current_user.showBooksBorrowed())
-                elif sub_choice == '4':
                     back = True
                 else:
                     print("Please choose options in the list!!!\n")

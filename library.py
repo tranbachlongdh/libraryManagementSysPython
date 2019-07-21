@@ -15,17 +15,39 @@ class Library:
     #   new book will be added to book list
     def add_book_manual(self):
         print("Please enter the book's information:")
-        isbn = input("isbn: ")
-        for tmpbook in self.availablebooks:
-            if tmpbook.isbn == isbn:
-                return
-        title = input("Book title: ")
-        subject = input("Subject: ")
-        author = input("Author: ")
-        publisher = input("Publisher: ")
-        date = input("Publish date: ")
-        pages = int(input("Pages: "))
-        copies = int(input("Copies: "))
+        flag = [False]*2
+        cancel = "N"
+        while not (flag[0] & flag[1]) and not (cancel == "Y" or cancel == 'y'):
+            isbn = input("isbn: ").strip()
+            title = input("Book title: ").strip()
+
+            for tmpbook in self.availablebooks:
+                if tmpbook.isbn == isbn:
+                    return
+
+            if isbn == '':
+                print("isbn should be filled.")
+                flag[0] = False
+            else:
+                flag[0] = True
+
+            if title == '':
+                print("title should be filled.")
+                flag[1] = False
+            else:
+                flag[1] = True
+
+            if not (flag[0] & flag[1]):
+                cancel = input("Cancel? (Y/N)>>")
+        if cancel == "Y" or cancel == 'y':
+            return print("Add book canceled!")
+        subject = input("Subject: ").strip()
+        author = input("Author: ").strip()
+        publisher = input("Publisher: ").strip()
+        date = input("Publish date: ").strip()
+        pages = input("Pages: ").strip()
+        copies = input("No. of copies: ").strip()
+        copies = 1 if copies == '' else int(copies)
 
         self.availablebooks.append(Book(isbn, title, subject, author, publisher, date, pages, copies))
 

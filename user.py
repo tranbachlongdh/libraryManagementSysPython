@@ -46,6 +46,9 @@ class User:
         print("Age: Unknown") if self.age is None else print("Age: {} years old".format(str(self.age)))
         print("Right: Admin.") if self.prior == 2 \
             else (print("Right: Moderator.") if self.prior == 1 else print("Right: Normal user."))
+        print("Books you borrowing: " + str(len(self.booksBorrowed)))
+        if len(self.booksBorrowed) != 0:
+            print(self.booksBorrowed)
         print("-------------------------------------------------------------")
         return 1
 
@@ -279,6 +282,7 @@ class UserManager:
                 "firstname": each_user.firstname,
                 "lastname": each_user.lastname,
                 "age": each_user.age,
-                "prior": each_user.prior
+                "prior": each_user.prior,
+                "booksBorrowed": each_user.booksBorrowed
             })
         return data
